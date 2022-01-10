@@ -29,10 +29,10 @@ io.on('connection', (socket) => {
   // when the client emits 'new message', this listens and executes
   socket.on('new message', (data) => {
     // we tell the client to execute 'new message'
-    socket.broadcast.emit('new message', {
+    socket.broadcast.emit('new message', JSON.stringify({
       username: socket.username,
       message: data
-    });
+    }));
   });
 
   // when the client emits 'add user', this listens and executes
@@ -43,28 +43,28 @@ io.on('connection', (socket) => {
     socket.username = username;
     ++numUsers;
     addedUser = true;
-    socket.emit('login', {
+    socket.emit('login', JSON.stringify({
       numUsers: numUsers
-    });
+    }));
     // echo globally (all clients) that a person has connected
-    socket.broadcast.emit('user joined', {
+    socket.broadcast.emit('user joined', JSON.stringify({
       username: socket.username,
       numUsers: numUsers
-    });
+    }));
   });
 
   // when the client emits 'typing', we broadcast it to others
   socket.on('typing', () => {
-    socket.broadcast.emit('typing', {
+    socket.broadcast.emit('typing', JSON.stringify({
       username: socket.username
-    });
+    }));
   });
 
   // when the client emits 'stop typing', we broadcast it to others
   socket.on('stop typing', () => {
-    socket.broadcast.emit('stop typing', {
+    socket.broadcast.emit('stop typing', JSON.stringify({
       username: socket.username
-    });
+    }));
   });
 
   // when the user disconnects.. perform this
@@ -73,10 +73,10 @@ io.on('connection', (socket) => {
       --numUsers;
 
       // echo globally that this client has left
-      socket.broadcast.emit('user left', {
+      socket.broadcast.emit('user left', JSON.stringify({
         username: socket.username,
         numUsers: numUsers
-      });
+      }));
     }
   });
 });
