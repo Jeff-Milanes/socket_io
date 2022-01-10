@@ -27,7 +27,7 @@ io.on('connection', (socket) => {
   let addedUser = false;
 
   socket.on('new message', (data) => {
-    socket.emit('new message', JSON.stringify({
+    socket.broadcast.emit('new message', JSON.stringify({
       username: socket.username,
       message: data
     }));
@@ -43,20 +43,20 @@ io.on('connection', (socket) => {
       numUsers: numUsers
     }));
 
-    socket.emit('user joined', JSON.stringify({
+    socket.broadcast.emit('user joined', JSON.stringify({
       username: socket.username,
       numUsers: numUsers
     }));
   });
 
   socket.on('typing', () => {
-    socket.emit('typing', JSON.stringify({
+    socket.broadcast.emit('typing', JSON.stringify({
       username: socket.username
     }));
   });
 
   socket.on('stop typing', () => {
-    socket.emit('stop typing', JSON.stringify({
+    socket.broadcast.emit('stop typing', JSON.stringify({
       username: socket.username
     }));
   });
@@ -65,7 +65,7 @@ io.on('connection', (socket) => {
     if (addedUser) {
       --numUsers;
 
-      socket.emit('user left', JSON.stringify({
+      socket.broadcast.emit('user left', JSON.stringify({
         username: socket.username,
         numUsers: numUsers
       }));
